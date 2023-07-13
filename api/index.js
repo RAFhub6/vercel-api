@@ -10,7 +10,7 @@ const db = mongoose.connection;
 db.on("error",(error)=>console.log(error));
 db.once("open",()=>console.log("DB Connected"));
 let accountSchema = new mongoose.Schema({
-  uid: Long,
+  uid: Number,
   username: String,
   password: String
 });
