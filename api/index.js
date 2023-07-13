@@ -13,7 +13,7 @@ async function mongonet(){
   e.once("open",()=>console.log("DB Connected"));
   return e
 }
-var db = await mongonet()
+
 
 let accountSchema = new mongoose.Schema({
   uid: Number,
@@ -44,7 +44,8 @@ app.get('/api/item/:slug', (req, res) => {
   
   res.end(`Item: ${slug}`);
 });
-app.post('/api/new/account', (req,res)=>{
+app.post('/api/new/account', async (req,res)=>{
+  var db = await mongonet()
   var new_user = new User({
     uid: Math.floor(Math.random() * (5000 - 20)) + 20,
     username: req.body.username,
