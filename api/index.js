@@ -19,7 +19,7 @@ let accountSchema = new mongoose.Schema({
   uid: Number,
   username: String,
   password: String
-});
+}, {collection: "users"});
 
 // hash the password
 accountSchema.methods.generateHash = function(password) {
