@@ -1,7 +1,7 @@
 const app = require('express')();
 const { v4 } = require('uuid');
 const mongoose = require('mongoose'); // include mongodb package
-const bcrypt = require('bcrypt-nodejs')
+const bcrypt = require('bcrypt')
 
 mongoose.set('strictQuery', true);
 const url = process.env.MONGODB_URI

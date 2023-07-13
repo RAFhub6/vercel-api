@@ -28,7 +28,7 @@
       "undici": "^5.22.1",
       "uuid": "^9.0.0",
       "mongoose": "^7.3.3",
-      "nodejs-bcrypt": "^5.1.0"
+      "bcrypt": "^5.1.0"
     },
     "devDependencies": {
       "nodemon": "^2.0.19"
