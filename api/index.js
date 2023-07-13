@@ -24,6 +24,7 @@ accountSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
 var User = mongoose.model('user', accountSchema);
+app.use(express.json())
 app.get('/api', (req, res) => {
   const path = `/api/item/${v4()}`;
   res.setHeader('Content-Type', 'text/html');
