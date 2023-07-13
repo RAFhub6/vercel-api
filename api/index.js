@@ -6,6 +6,14 @@ const bcrypt = require('bcrypt')
 
 mongoose.set('strictQuery', true);
 const url = process.env.MONGODB_URI
+async function mongonet(){
+  await mongoose.connect(url)
+  var e = mongoose.connection
+  e.on("error",(error)=>console.log(error));
+  e.once("open",()=>console.log("DB Connected"));
+  return e
+}
+var db = await mongonet()
 
 let accountSchema = new mongoose.Schema({
   uid: Number,
@@ -23,10 +31,7 @@ accountSchema.methods.validPassword = function(password, input) {
   return bcrypt.compareSync(input,password );
 };*/
 var User = mongoose.model('user', accountSchema);
-
 app.use(express.json())
-
-
 app.get('/api', (req, res) => {
   const path = `/api/item/${v4()}`;
   res.setHeader('Content-Type', 'text/html');
@@ -40,10 +45,6 @@ app.get('/api/item/:slug', (req, res) => {
   res.end(`Item: ${slug}`);
 });
 app.post('/api/new/account', (req,res)=>{
-  mongoose.connect(url)
-const db = mongoose.connection;
-  db.on("error",(error)=>console.log(error));
-  db.once("open",()=>console.log("DB Connected"));
   var new_user = new User({
     uid: Math.floor(Math.random() * (5000 - 20)) + 20,
     username: req.body.username,
