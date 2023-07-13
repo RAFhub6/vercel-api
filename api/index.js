@@ -1,28 +1,29 @@
 const app = require('express')();
 const express = require('express')
 const { v4 } = require('uuid');
-const mongoose = require('mongoose'); // include mongodb package
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const bcrypt = require('bcrypt')
 
-mongoose.set('strictQuery', true);
 const url = process.env.MONGODB_URI
-function mongonet(){
-  mongoose.connect(url)
-  var e = mongoose.connection
-  e.on("error",(error)=>console.log(error));
-  e.once("open",()=>console.log("DB Connected"));
-  return e
+const db = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+try {
+    await db.connect()
+    await db.db("admin").command({ ping: 1 });
+    console.log("DB Connected. 🥳");
+} catch(e) {
+    // Ensures that the client will close when you finish/error
+    console.error(e)
+    await db.close();
 }
-var db = mongonet()
-
-let accountSchema = new mongoose.Schema({
-  uid: Number,
-  username: String,
-  password: String
-}, {collection: "users"});
-
 // hash the password
-accountSchema.methods.generateHash = function(password) {
+function generateHash(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
@@ -48,22 +49,21 @@ app.post('/api/new/account', async (req,res)=>{
   if (!req.body.password || !req.body.username){
     res.status(400).json({message: "Bad payload", type: "error"})
   } else {
-    db.useDb('users')
-   var new_user = new User({
-    uid: Math.floor(Math.random() * (5000 - 20)) + 20,
-    username: req.body.username,
-    level: "new_member"
-   });
+    var users = db.db('users')
+   
 
-   new_user.password = new_user.generateHash(req.body.password);
    try {
-    new_user.save();
-    User.findOne({username: req.body.username}).then((leads)=>{
-      res.json(leads)
-    }).catch((err)=>{
-      res.status(500).json({message: "Query exited with error.", type: "error"})
-      console.error(e)
-    })
+    users.collection("accounts").insertOne({
+       uid: Math.floor(Math.random() * (5000 - 20)) + 20,
+       username: req.body.username,
+       password: generateHash(req.body.password),
+       level: "new_member"
+   });
+   dbo.collection("customers").find({username: req.body.username}).toArray(function(err, result) {
+    if (err) throw err;
+    res.json(result)
+    db.close();
+  });
     
    } catch(e){
     res.status(500).json({message: "Query exited with error.", type: "error"})
