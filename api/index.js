@@ -58,7 +58,7 @@ app.post('/api/new/account', async (req,res)=>{
        password: generateHash(req.body.password),
        level: "new_member"
    });
-   dbo.collection("customers").find({username: req.body.username}).toArray(function(err, result) {
+   users.collection("accounts").find({username: req.body.username}).toArray(function(err, result) {
     if (err) throw err;
     res.json(result)
     db.close();
