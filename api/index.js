@@ -55,8 +55,10 @@ app.post('/api/new/account', async (req,res)=>{
   new_user.password = new_user.generateHash(req.body.password);
   try {
     new_user.save();
-    const account = User.findOne({username: req.body.username})
-    res.json(account)
+    User.findOne({username: req.body.username}).exec((err,leads)=>{
+      res.json(leads)
+    })
+    
   } catch(e){
     res.status(500).json({message: "Query exited with error.", type: "error"})
     console.error(e)
