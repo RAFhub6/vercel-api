@@ -46,6 +46,7 @@ app.get('/api/item/:slug', (req, res) => {
 });
 app.post('/api/new/account', async (req,res)=>{
   var db = mongonet()
+  db.useDb('users')
   var new_user = new User({
     uid: Math.floor(Math.random() * (5000 - 20)) + 20,
     username: req.body.username,
@@ -53,6 +54,17 @@ app.post('/api/new/account', async (req,res)=>{
   });
 
   new_user.password = new_user.generateHash(req.body.password);
-  new_user.save();
+  try {
+    new_user.save();
+    const account = db.findOne({username: req.body.username})
+    res.json(account)
+    db.close()
+  } catch(e){
+    res.status = 500
+    res.json({message: "Query exited with error.", type: "error"})
+    db.close()
+  }
+  
+  
 })
 module.exports = app;
