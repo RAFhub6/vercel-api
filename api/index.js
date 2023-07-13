@@ -13,7 +13,7 @@ function mongonet(){
   e.once("open",()=>console.log("DB Connected"));
   return e
 }
-
+var db = mongonet()
 
 let accountSchema = new mongoose.Schema({
   uid: Number,
@@ -45,7 +45,6 @@ app.get('/api/item/:slug', (req, res) => {
   res.end(`Item: ${slug}`);
 });
 app.post('/api/new/account', async (req,res)=>{
-  var db = mongonet()
   db.useDb('users')
   var new_user = new User({
     uid: Math.floor(Math.random() * (5000 - 20)) + 20,
@@ -56,13 +55,11 @@ app.post('/api/new/account', async (req,res)=>{
   new_user.password = new_user.generateHash(req.body.password);
   try {
     new_user.save();
-    const account = db.findOne({username: req.body.username})
+    const account = User.findOne({username: req.body.username})
     res.json(account)
-    db.close()
   } catch(e){
     res.status(500).json({message: "Query exited with error.", type: "error"})
     console.error(e)
-    db.close()
   }
   
   
