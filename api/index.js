@@ -58,11 +58,10 @@ app.post('/api/new/account', async (req,res)=>{
        password: generateHash(req.body.password),
        level: "new_member"
    });
-   users.collection("accounts").find({username: req.body.username}).toArray(function(err, result) {
-    if (err) throw err;
+   var result = await users.collection("accounts").find({username: req.body.username})
+   console.log(result)
     res.json(result)
     db.close();
-  });
     
    } catch(e){
     res.status(500).json({message: "Query exited with error.", type: "error"})
