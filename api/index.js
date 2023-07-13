@@ -6,8 +6,8 @@ const bcrypt = require('bcrypt')
 
 mongoose.set('strictQuery', true);
 const url = process.env.MONGODB_URI
-async function mongonet(){
-  await mongoose.connect(url)
+function mongonet(){
+  mongoose.connect(url)
   var e = mongoose.connection
   e.on("error",(error)=>console.log(error));
   e.once("open",()=>console.log("DB Connected"));
