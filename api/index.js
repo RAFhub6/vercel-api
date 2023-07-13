@@ -14,13 +14,13 @@ const db = new MongoClient(uri, {
 });
 
 try {
-    await db.connect()
-    await db.db("admin").command({ ping: 1 });
+    db.connect()
+    db.db("admin").command({ ping: 1 });
     console.log("DB Connected. 🥳");
 } catch(e) {
     // Ensures that the client will close when you finish/error
     console.error(e)
-    await db.close();
+    db.close();
 }
 // hash the password
 function generateHash(password) {
