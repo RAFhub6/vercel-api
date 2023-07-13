@@ -60,8 +60,8 @@ app.post('/api/new/account', async (req,res)=>{
     res.json(account)
     db.close()
   } catch(e){
-    res.status = 500
-    res.json({message: "Query exited with error.", type: "error"})
+    res.status(500).json({message: "Query exited with error.", type: "error"})
+    console.error(e)
     db.close()
   }
   
