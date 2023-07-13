@@ -14,6 +14,7 @@ let accountSchema = new mongoose.Schema({
   username: String,
   password: String
 });
+
 // hash the password
 accountSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
