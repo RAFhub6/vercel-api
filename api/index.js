@@ -45,24 +45,32 @@ app.get('/api/item/:slug', (req, res) => {
   res.end(`Item: ${slug}`);
 });
 app.post('/api/new/account', async (req,res)=>{
-  db.useDb('users')
-  var new_user = new User({
+  if (!req.body.password || !req.body.username){
+    res.status(400).json({message: "Bad payload", type: "error"})
+  } else {
+    db.useDb('users')
+   var new_user = new User({
     uid: Math.floor(Math.random() * (5000 - 20)) + 20,
     username: req.body.username,
     level: "new_member"
-  });
+   });
 
-  new_user.password = new_user.generateHash(req.body.password);
-  try {
+   new_user.password = new_user.generateHash(req.body.password);
+   try {
     new_user.save();
-    User.findOne({username: req.body.username}).exec((err,leads)=>{
+    User.findOne({username: req.body.username}).then((leads)=>{
       res.json(leads)
+    }).catch((err)=>{
+      res.status(500).json({message: "Query exited with error.", type: "error"})
+      console.error(e)
     })
     
-  } catch(e){
+   } catch(e){
     res.status(500).json({message: "Query exited with error.", type: "error"})
     console.error(e)
+   }
   }
+  
   
   
 })
