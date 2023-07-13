@@ -19,10 +19,10 @@ accountSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-// checking if password is valid
+/* checking if password is valid
 accountSchema.methods.validPassword = function(password, input) {
   return bcrypt.compareSync(input,password );
-};
+};*/
 var User = mongoose.model('user', accountSchema);
 app.use(express.json())
 app.get('/api', (req, res) => {
