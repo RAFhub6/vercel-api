@@ -5,7 +5,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const bcrypt = require('bcrypt')
 
 const url = process.env.MONGODB_URI
-const db = new MongoClient(uri, {
+const db = new MongoClient(url, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
