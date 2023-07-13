@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 
 mongoose.set('strictQuery', true);
 const url = process.env.MONGODB_URI
-async function mongonet(){
+function mongonet(){
   await mongoose.connect(url)
   var e = mongoose.connection
   e.on("error",(error)=>console.log(error));
@@ -45,7 +45,7 @@ app.get('/api/item/:slug', (req, res) => {
   res.end(`Item: ${slug}`);
 });
 app.post('/api/new/account', async (req,res)=>{
-  var db = await mongonet()
+  var db = mongonet()
   var new_user = new User({
     uid: Math.floor(Math.random() * (5000 - 20)) + 20,
     username: req.body.username,
