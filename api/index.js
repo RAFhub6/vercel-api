@@ -61,12 +61,8 @@ app.post('/api/new/account', async (req,res)=>{
     if (err) throw err;
     console.log("1 document inserted");
   });
-  users.collection("accounts").find({username: req.body.username}).toArray(function(err, result) {
-    if (err) throw err;
-    console.log(result);
-    res.json(result)
-    db.close();
-  });
+  const result = users.collection("accounts").find({username: req.body.username}).toArray();
+  res.status(200).json({account: result})
    } catch(e){
     res.status(500).json({message: "Query exited with error.", type: "error"})
     console.error(e)
