@@ -52,20 +52,24 @@ app.post('/api/new/account', async (req,res)=>{
    
 
    try {
-    users.collection("accounts").insertOne({
+   users.collection("accounts").insertOne({
        uid: Math.floor(Math.random() * (5000 - 20)) + 20,
        username: req.body.username,
        password: generateHash(req.body.password),
        level: "new_member"
-   });
-   var result = await users.collection("accounts").find({username: req.body.username})
-   console.log(result)
-    res.json(result)
+   }, function(err, res) {
+    if (err) throw err;
+    console.log("1 document inserted");
+  });
+  users.collection("accounts").find(query).toArray(function(err, result) {
+    if (err) throw err;
+    console.log(result);
     db.close();
-    
+  });
    } catch(e){
     res.status(500).json({message: "Query exited with error.", type: "error"})
     console.error(e)
+    db.close()
    }
   }
   
