@@ -1,7 +1,8 @@
 {
   "rewrites": [{ "source": "/api/(.*)", "destination": "/api" }],
   "redirects": [
-    { "source": "/", "destination": "/public/index.html" }
+    { "source": "/", "destination": "/public/index.html" },
+    { "source": "/pash", "destination": "/pash/pash.html" }
   ],
   "cleanUrls": true
 }
